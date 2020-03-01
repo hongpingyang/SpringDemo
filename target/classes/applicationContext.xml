@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd"
+>
+
+
+    <!--实例工厂-->
+    <bean id="accountfactory" class="com.hong.py.factory.AccountFactory"></bean>
+    <bean id="accountservicefactory1" factory-bean="accountfactory" factory-method="getAccountServiceImpl"></bean>
+    <!--静态工厂-->
+    <bean id="accountservicefactory2" class="com.hong.py.factory.AccountStaticFactory"
+          factory-method="getAccountServiceImpl"></bean>
+
+
+    <!--构造函数注入
+      constructor-arg 标签中的属性
+        name:参数名
+        type:参数类型
+        index:指定参数的位置，从0开始
+        value: 参数的值(基本类型)
+        ref: 关联其他的bean
+    -->
+
+    <bean id="accountservice" class="com.hong.py.serviceImpl.AccountServiceImpl">
+        <constructor-arg name="name" value="洪平洋"></constructor-arg>
+        <constructor-arg name="age" type="java.lang.Integer" value="23"></constructor-arg>
+        <constructor-arg name="birthday" type="java.util.Date" ref="now"></constructor-arg>
+    </bean>
+
+    <bean id="now" class="java.util.Date"></bean>
+
+    <!--set方式
+       property标签中的属性
+           name:为setter方法中方法名称
+           value: 参数的值(基本类型)
+           ref: 关联其他的bean
+    -->
+    <bean id="accountservice2" class="com.hong.py.serviceImpl.AccountServiceImpl2">
+        <property name="name" value="洪平洋"></property>
+        <property name="age" value="23"></property>
+        <property name="birthday" ref="now"></property>
+    </bean>
+
+    <!--复杂类型注入方式
+        用于给list结构集合注入的标签有list array set
+        用于map结构集合注入的标签有map、props
+     -->
+    <bean id="accountservice3" class="com.hong.py.serviceImpl.AccountServiceImpl3">
+        <property name="myStrs">
+            <array>
+                <value>123</value>
+                <value>456</value>
+                <value>789</value>
+            </array>
+        </property>
+        <property name="mylist">
+            <list>
+                <value>123</value>
+                <value>456</value>
+                <value>789</value>
+            </list>
+        </property>
+        <property name="mySets">
+            <set>
+                <value>123</value>
+                <value>456</value>
+                <value>789</value>
+            </set>
+        </property>
+        <property name="myMaps">
+            <map>
+                <entry key="1" value="aaa"></entry>
+                <entry key="2" value="bbb"></entry>
+                <entry key="3">
+                    <value>ccc</value>
+                </entry>
+            </map>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="p1"></prop>
+                <prop key="p2"></prop>
+                <prop key="p3"></prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!--被代理的类-->
+    <bean id="accountService2" class="com.hong.py.serviceImpl.AccountService2Impl"/>
+
+    <!--切面类bean-->
+    <bean id="logger" class="com.hong.py.uti.Logger"/>
+
+    <!--aop配置-->
+    <aop:config>
+        <!--切点
+          expression 表达式入参：
+          基本类型直接写名称：int
+          引用类型写包名.类名的形式： java.lang.String
+        -->
+        <aop:pointcut id="accountPoint" expression="execution(* com.hong.py.serviceImpl.AccountService2Impl.*(..))"/>
+        <!--配置切面类和通知 关联切点-->
+        <aop:aspect id="logAspect" ref="logger">
+            <!--<aop:before method="beforeprintLog" pointcut-ref="accountPoint"/>
+            &lt;!&ndash;在切入点正常执行下才执行&ndash;&gt;
+            <aop:after method="afterprintLog" pointcut-ref="accountPoint"/>
+            &lt;!&ndash;在切入点执行下有异常才执行&ndash;&gt;
+            <aop:after-throwing method="afterThrowingprintLog" pointcut-ref="accountPoint"/>
+            <aop:after-returning method="afterReturningprintLog" pointcut-ref="accountPoint"/>-->
+            <aop:around method="aroundprintLog" pointcut-ref="accountPoint"/>
+        </aop:aspect>
+    </aop:config>
+
+    <!--包扫描-->
+    <context:component-scan base-package="com.hong.py.*"/>
+
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+
+    <!--配置连接池-->
+    <bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/mybatis?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
+        <property name="username" value="root"/>
+        <property name="password" value="471215"/>
+    </bean>
+
+    <!--配置jdbcTemplate-->
+    <bean id="jdcbTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="datasource"/>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource"/>
+    </bean>
+
+    <!--配置事务的通知-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!--配置事务的属性
+            isolation:用于指定事务的隔离级别，默认值是DEFAULT，表示使用数据库的默认隔离级别
+            propagation:事务的传播行为，默认值是REQUIRED
+                        REQUIRED:如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入到这个事务中。这是最常见的选择。
+                        SUPPORTS:支持当前事务，如果当前没有事务，就以非事务方式执行
+            read-only:用于指定事务是否是自读，只有查询方法才能设置为true。默认值是false。
+            timeout:事务的超时时间，默认值是-1，
+            rollback-for：指定一个异常，异常产生时，事务回滚，产生其他异常都不回滚。
+            no-rollback-for：指定一个异常，异常产生时，事务不回滚，产生其他异常都回滚。
+          -->
+        <tx:attributes>
+            <tx:method name="find*" read-only="true" isolation="SERIALIZABLE" propagation="SUPPORTS"/>
+            <tx:method name="Transfer*" isolation="DEFAULT"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置事务切入点，建立 切入点和 事务通知的关系-->
+    <aop:config>
+        <aop:pointcut expression="execution(* com.hong.py.serviceImpl.AccountServiceImpl4.*(..))"  id="pointCut" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut"/>
+    </aop:config>
+
+    <!--开启tx的注解-->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+
+</beans>
