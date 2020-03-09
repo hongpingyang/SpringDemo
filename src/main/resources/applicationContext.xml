@@ -14,9 +14,20 @@
        http://www.springframework.org/schema/tx/spring-tx.xsd"
 >
 
+    <!--测试 abstract 和 parent-->
+    <bean id="abstractParent" abstract="true">
+        <property name="name" value="Frank" />
+        <property name="age" value="18" />
+    </bean>
+
+    <bean id="testChild" class="com.hong.py.serviceImpl.ChildBean" parent="abstractParent">
+        <property name="name" value="son"/>
+        <property name="height" value="180"/>
+    </bean>
+
 
     <!--实例工厂-->
-    <bean id="accountfactory" class="com.hong.py.factory.AccountFactory"></bean>
+    <bean id="accountfactory" class="com.hong.py.factory.AccountFactory" ></bean>
     <bean id="accountservicefactory1" factory-bean="accountfactory" factory-method="getAccountServiceImpl"></bean>
     <!--静态工厂-->
     <bean id="accountservicefactory2" class="com.hong.py.factory.AccountStaticFactory"
