@@ -19,12 +19,43 @@
         <property name="name" value="Frank" />
         <property name="age" value="18" />
     </bean>
-
-    <bean id="testChild" class="com.hong.py.serviceImpl.ChildBean" parent="abstractParent">
+    <!--
+     bean中的主要属性：
+      scope:
+      abstract:
+      lazy_init:
+      autowire:
+      depend-on:
+      autowire-candidate:
+      primary:
+      init-method:
+      destroy-method:
+      factory-method:
+      factory-bean:
+    -->
+    <bean id="testChild" class="com.hong.py.serviceImpl.ChildBean" parent="abstractParent" scope="singleton" lazy-init="true">
         <property name="name" value="son"/>
         <property name="height" value="180"/>
+        <meta key="testStr" value="aaaaa"/> <!-- 这是一个额外的声明-->
     </bean>
 
+    <bean id="autoWireByName1" class="com.hong.py.serviceImpl.AutoWireByName1" autowire-candidate="false" >
+        <property name="name" value="this is bynameTest"/>
+    </bean>
+    <bean id="autoWireByName11" class="com.hong.py.serviceImpl.AutoWireByName1" primary="true" >
+        <property name="name" value="this is bynameTest11"/>
+    </bean>
+    <bean id="autoWireByName" class="com.hong.py.serviceImpl.AutoWireByName" autowire="byName" >
+    </bean>
+
+    <bean id="autoWireByNamenew" class="com.hong.py.serviceImpl.AutoWireByName" autowire="byType">
+    </bean>
+
+    <bean id="autoWireByConstructor1" class="com.hong.py.serviceImpl.AutoWireByConstructor1">
+        <property name="name" value="this is byConstructorTest"/>
+    </bean>
+    <bean id="autoWireByConstructor" class="com.hong.py.serviceImpl.AutoWireByConstructor" autowire="constructor" depends-on="autoWireByConstructor1">
+    </bean>
 
     <!--实例工厂-->
     <bean id="accountfactory" class="com.hong.py.factory.AccountFactory" ></bean>
@@ -32,6 +63,19 @@
     <!--静态工厂-->
     <bean id="accountservicefactory2" class="com.hong.py.factory.AccountStaticFactory"
           factory-method="getAccountServiceImpl"></bean>
+
+    <bean id="myBeanFactoryAware" class="com.hong.py.springSourceCode.MyBeanFactoryAware" ></bean>
+    <!--lookUp-method -->
+    <bean id="lookUpMethodDemo" class="com.hong.py.serviceImpl.LookUpMethodDemo" >
+        <lookup-method name="getChildBean" bean="testChild"/>
+    </bean>
+
+    <bean id="idRefDemo" class="com.hong.py.serviceImpl.IdRefDemo" autowire="constructor">
+        <qualifier type="com.hong.py.serviceImpl.ChildBean" value="testChild">
+          <attribute key="测试的数据" value="大"></attribute> <!--attribute类似于meta-->
+        </qualifier>
+    </bean>
+    <alias name="idRefDemo" alias="idRefDemo,idRefDemo2,idRefDemo3"/>
 
 
     <!--构造函数注入
@@ -44,7 +88,7 @@
     -->
 
     <bean id="accountservice" class="com.hong.py.serviceImpl.AccountServiceImpl">
-        <constructor-arg name="name" value="洪平洋"></constructor-arg>
+        <constructor-arg name="name" index="0" value="洪平洋"></constructor-arg>
         <constructor-arg name="age" type="java.lang.Integer" value="23"></constructor-arg>
         <constructor-arg name="birthday" type="java.util.Date" ref="now"></constructor-arg>
     </bean>
