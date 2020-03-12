@@ -155,6 +155,9 @@
     <!--被代理的类-->
     <bean id="accountService2" class="com.hong.py.serviceImpl.AccountService2Impl"/>
 
+    <!--工厂bean-->
+    <bean id="myFactoryBean" class="com.hong.py.factory.MyFactoryBean"/>
+
     <!--切面类bean-->
     <bean id="logger" class="com.hong.py.uti.Logger"/>
 
