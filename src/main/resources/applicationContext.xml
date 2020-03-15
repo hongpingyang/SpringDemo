@@ -161,6 +161,22 @@
     <!--切面类bean-->
     <bean id="logger" class="com.hong.py.uti.Logger"/>
 
+
+    <!--注册属性编辑器-->
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
+            <map>
+                <entry key="com.hong.py.serviceImpl.ChildBean" value="com.hong.py.serviceImpl.SelfPropertyEditor">
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="propertyEditorDemo" class="com.hong.py.serviceImpl.PropertyEditorDemo">
+        <property name="name" value="这是一个测试的类型"/>
+        <property name="childBean" value="洪大🐏,18,180"/>
+    </bean>
+
     <!--aop配置-->
     <aop:config>
         <!--切点

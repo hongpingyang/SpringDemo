@@ -9,13 +9,15 @@ import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
 public class BeanFactoryTest {
 
     @Test
     public void testSampleLoad() {
-        BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
+        //BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
         /*AccountServiceImpl accountservice = (AccountServiceImpl) beanFactory.getBean("accountservice");
         System.out.println(accountservice.toString());*/
         /*ChildBean testChild = (ChildBean)beanFactory.getBean("testChild");
@@ -47,7 +49,35 @@ public class BeanFactoryTest {
         System.out.println(myFactoryBean.toString());*/
 
         //返回工厂bean的实例
-        AccountServiceImpl accountServiceImpl = (AccountServiceImpl) beanFactory.getBean("accountservicefactory1");
-        System.out.println(accountServiceImpl.toString());
+        /*AccountServiceImpl accountServiceImpl = (AccountServiceImpl) beanFactory.getBean("accountservicefactory1");
+        System.out.println(accountServiceImpl.toString());*/
+
+        ApplicationContext parentbeanFactory = new ClassPathXmlApplicationContext("propertyEditor.xml");
+        PropertyEditorDemo propertyEditorDemo = (PropertyEditorDemo) parentbeanFactory.getBean("propertyEditorDemo");
+        System.out.println(propertyEditorDemo.toString());
+    }
+
+    @Test
+    public void parentBeanFactory() {
+        /*ApplicationContext parentbeanFactory = new ClassPathXmlApplicationContext("parent.xml");
+        ApplicationContext sonbeanFactory = new ClassPathXmlApplicationContext(new String[]{"child.xml"}, parentbeanFactory);
+        System.out.println(sonbeanFactory.getBean("child"));
+        System.out.println(sonbeanFactory.getBean("parent"));
+        //会抛出异常
+        //org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'child' available
+        System.out.println(parentbeanFactory.getBean("child"));
+        System.out.println(parentbeanFactory.getBean("parent"));
+
+        System.out.println(sonbeanFactory.containsBean("child"));  //子容器中可以获取Bean:child
+        System.out.println(parentbeanFactory.containsBean("child")); //父容器中不可以获取Bean:child
+        System.out.println(sonbeanFactory.containsBean("parent")); //子容器中可以获取Bean:parent
+        System.out.println(parentbeanFactory.containsBean("parent")); //父容器可以获取Bean:parent
+        //以下是使用HierarchicalBeanFactory接口中的方法
+        ApplicationContext parent2 = (ApplicationContext) sonbeanFactory.getParentBeanFactory();  //获取当前接口的父容器
+        System.out.println(parentbeanFactory == parent2);
+        System.out.println(sonbeanFactory.containsLocalBean("child"));  //当前子容器本地是包含child
+        System.out.println(parentbeanFactory.containsLocalBean("child")); //当前父容器本地不包含child
+        System.out.println(sonbeanFactory.containsLocalBean("parent")); //当前子容器本地不包含child
+        System.out.println(parentbeanFactory.containsLocalBean("parent")); //当前父容器本地包含parent*/
     }
 }
