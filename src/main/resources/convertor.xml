@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd"
+>
+
+    <!--注册转换器 这个只是注册到容器 一定要写id 且 id="conversionService"
+    ConversionServiceFactoryBean 实现了 InitializingBean 接口实现 afterPropertiesSet() ，
+    我们知道在 Bean 实例化 bean 阶段，Spring 容器会检查当前 bean 是否实现了 InitializingBean 接口，
+    如果是则执行相应的初始化方法。-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean  class="com.hong.py.springSourceCode.MyConvertor">
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="propertyEditorDemo" class="com.hong.py.serviceImpl.PropertyEditorDemo">
+        <property name="name" value="这是一个测试的类型"/>
+        <property name="childBean" value="洪大🐏,18,180"/>
+    </bean>
+
+</beans>

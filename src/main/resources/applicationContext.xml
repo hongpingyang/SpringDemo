@@ -65,6 +65,11 @@
           factory-method="getAccountServiceImpl"></bean>
 
     <bean id="myBeanFactoryAware" class="com.hong.py.springSourceCode.MyBeanFactoryAware" ></bean>
+
+    <bean id="postProcessorDemo" class="com.hong.py.serviceImpl.PostProcessorDemo" >
+        <property name="myBeanFactoryAware" ref="myBeanFactoryAware"/>
+    </bean>
+
     <!--lookUp-method -->
     <bean id="lookUpMethodDemo" class="com.hong.py.serviceImpl.LookUpMethodDemo" >
         <lookup-method name="getChildBean" bean="testChild"/>
@@ -175,6 +180,10 @@
     <bean id="propertyEditorDemo" class="com.hong.py.serviceImpl.PropertyEditorDemo">
         <property name="name" value="这是一个测试的类型"/>
         <property name="childBean" value="洪大🐏,18,180"/>
+    </bean>
+
+    <bean id="myInitializingBean" class="com.hong.py.springSourceCode.MyInitializingBean" init-method="initMethod">
+        <property name="testStr" value="这是一个测试的类型"/>
     </bean>
 
     <!--aop配置-->

@@ -9,7 +9,12 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 
+/**
+ * Aware类接口的实现类是为了得到某些资源，例如BeanFactoryAware是为来获取BeanFactory
+ * 例如ApplicationContextAware是为来获取ApplicationContext
+ */
 public class MyBeanFactoryAware implements BeanFactoryAware {
+
 
     private  BeanFactory  beanFactory;
     @Override
@@ -27,5 +32,7 @@ public class MyBeanFactoryAware implements BeanFactoryAware {
         factory.registerBeanDefinition("ChildBeandog",definition);
         //ChildBean dog=(ChildBean)factory.getBean("ChildBeandog");
         //System.out.print(dog.getName());
+        System.out.println("成功向容器中添加ChildBeandog");
+
     }
 }

@@ -5,6 +5,7 @@ import com.hong.py.factory.AccountFactory;
 import com.hong.py.factory.MyFactoryBean;
 import com.hong.py.serviceImpl.*;
 import com.hong.py.springSourceCode.MyBeanFactoryAware;
+import com.hong.py.springSourceCode.MyInitializingBean;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -52,9 +53,17 @@ public class BeanFactoryTest {
         /*AccountServiceImpl accountServiceImpl = (AccountServiceImpl) beanFactory.getBean("accountservicefactory1");
         System.out.println(accountServiceImpl.toString());*/
 
-        ApplicationContext parentbeanFactory = new ClassPathXmlApplicationContext("propertyEditor.xml");
+        /*ApplicationContext parentbeanFactory = new ClassPathXmlApplicationContext("propertyEditor.xml");
         PropertyEditorDemo propertyEditorDemo = (PropertyEditorDemo) parentbeanFactory.getBean("propertyEditorDemo");
-        System.out.println(propertyEditorDemo.toString());
+        System.out.println(propertyEditorDemo.toString());*/
+
+        /*BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
+        MyBeanFactoryAware myBeanFactoryAware = (MyBeanFactoryAware) beanFactory.getBean("myBeanFactoryAware");
+        myBeanFactoryAware.AddBean();*/
+
+        BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
+        MyInitializingBean myInitializingBean = (MyInitializingBean) beanFactory.getBean("myInitializingBean");
+        myInitializingBean.printStr();
     }
 
     @Test
@@ -72,12 +81,20 @@ public class BeanFactoryTest {
         System.out.println(parentbeanFactory.containsBean("child")); //父容器中不可以获取Bean:child
         System.out.println(sonbeanFactory.containsBean("parent")); //子容器中可以获取Bean:parent
         System.out.println(parentbeanFactory.containsBean("parent")); //父容器可以获取Bean:parent
-        //以下是使用HierarchicalBeanFactory接口中的方法
+
         ApplicationContext parent2 = (ApplicationContext) sonbeanFactory.getParentBeanFactory();  //获取当前接口的父容器
         System.out.println(parentbeanFactory == parent2);
         System.out.println(sonbeanFactory.containsLocalBean("child"));  //当前子容器本地是包含child
         System.out.println(parentbeanFactory.containsLocalBean("child")); //当前父容器本地不包含child
         System.out.println(sonbeanFactory.containsLocalBean("parent")); //当前子容器本地不包含child
         System.out.println(parentbeanFactory.containsLocalBean("parent")); //当前父容器本地包含parent*/
+    }
+
+    @Test
+    public void convertorTest() {
+        ApplicationContext beanFactory = new ClassPathXmlApplicationContext("convertor.xml");
+        PropertyEditorDemo propertyEditorDemo = (PropertyEditorDemo)beanFactory.getBean("propertyEditorDemo");
+        System.out.println(propertyEditorDemo.toString());
+
     }
 }
