@@ -20,4 +20,5 @@
         <property name="name" value="洪小🐏"/>
     </bean>
 
+    <bean class="com.hong.py.springSourceCode.CustomBeanFactoryPostProcessor" id="customBeanFactoryPostProcessor" />
 </beans>

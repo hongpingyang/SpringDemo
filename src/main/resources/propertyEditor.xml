@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/aop
@@ -11,17 +11,25 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd"
+       http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd"
 >
 
     <!--注册属性编辑器 CustomEditorConfigurer 就是一个BeanFactoryPostProcessor-->
-    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+    <!--<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
         <property name="customEditors">
             <map>
                 <entry key="com.hong.py.serviceImpl.ChildBean" value="com.hong.py.serviceImpl.SelfPropertyEditor">
                 </entry>
             </map>
         </property>
+    </bean>-->
+
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+         <property name="propertyEditorRegistrars">
+             <list>
+                 <bean class="com.hong.py.serviceImpl.PropertyEditorRegisterDemo"/>
+             </list>
+         </property>
     </bean>
 
     <bean id="propertyEditorDemo" class="com.hong.py.serviceImpl.PropertyEditorDemo">

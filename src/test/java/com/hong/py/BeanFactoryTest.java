@@ -5,6 +5,7 @@ import com.hong.py.factory.AccountFactory;
 import com.hong.py.factory.MyFactoryBean;
 import com.hong.py.serviceImpl.*;
 import com.hong.py.springSourceCode.MyBeanFactoryAware;
+import com.hong.py.springSourceCode.MyClassPathXmlApplicationContext;
 import com.hong.py.springSourceCode.MyInitializingBean;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.StringValueResolver;
 
 public class BeanFactoryTest {
 
@@ -95,6 +97,22 @@ public class BeanFactoryTest {
         ApplicationContext beanFactory = new ClassPathXmlApplicationContext("convertor.xml");
         PropertyEditorDemo propertyEditorDemo = (PropertyEditorDemo)beanFactory.getBean("propertyEditorDemo");
         System.out.println(propertyEditorDemo.toString());
+
+    }
+
+    @Test
+    public void myApplicationContext() {
+        ApplicationContext  myClassPathXmlApplicationContext= new MyClassPathXmlApplicationContext("child.xml");
+        ChildBean child = (ChildBean)myClassPathXmlApplicationContext.getBean("child");
+        System.out.println(child);
+    }
+
+    @Test
+    public void myPropertyEditor() {
+        ApplicationContext parentbeanFactory = new ClassPathXmlApplicationContext("propertyEditor.xml");
+        PropertyEditorDemo propertyEditorDemo = (PropertyEditorDemo) parentbeanFactory.getBean("propertyEditorDemo");
+        System.out.println(propertyEditorDemo.toString());
+
 
     }
 }
