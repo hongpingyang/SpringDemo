@@ -14,16 +14,12 @@
        http://www.springframework.org/schema/tx/spring-tx.xsd"
 >
 
-    <bean id="child" class="com.hong.py.serviceImpl.ChildBean">
-        <property name="age" value="18"/>
-        <property name="height" value="180"/>
-        <property name="name" value="洪小🐏"/>
-    </bean>
-
-    <bean class="com.hong.py.springSourceCode.CustomBeanFactoryPostProcessor" id="customBeanFactoryPostProcessor" />
-
-    <bean class="com.hong.py.springSourceCode.PriorityBeanPostProcessor" id="priorityBeanPostProcessor" />
-
-    <bean class="com.hong.py.springSourceCode.PriorityBeanPostProcessor1" id="priorityBeanPostProcessor1" />
+<bean class="org.springframework.context.support.ResourceBundleMessageSource" id="configProperties">
+    <property name="basenames">
+        <list>
+            <value>config.properties.lang</value>
+        </list>
+    </property>
+</bean>
 
 </beans>

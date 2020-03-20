@@ -4,17 +4,24 @@ package com.hong.py;
 import com.hong.py.factory.AccountFactory;
 import com.hong.py.factory.MyFactoryBean;
 import com.hong.py.serviceImpl.*;
+import com.hong.py.springSourceCode.CustomBeanFactoryPostProcessor;
 import com.hong.py.springSourceCode.MyBeanFactoryAware;
 import com.hong.py.springSourceCode.MyClassPathXmlApplicationContext;
 import com.hong.py.springSourceCode.MyInitializingBean;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.AbstractXmlApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringValueResolver;
+
+import java.util.Locale;
 
 public class BeanFactoryTest {
 
@@ -102,7 +109,7 @@ public class BeanFactoryTest {
 
     @Test
     public void myApplicationContext() {
-        ApplicationContext  myClassPathXmlApplicationContext= new MyClassPathXmlApplicationContext("child.xml");
+        AbstractApplicationContext  myClassPathXmlApplicationContext= new MyClassPathXmlApplicationContext("child.xml");
         ChildBean child = (ChildBean)myClassPathXmlApplicationContext.getBean("child");
         System.out.println(child);
     }
@@ -112,7 +119,22 @@ public class BeanFactoryTest {
         ApplicationContext parentbeanFactory = new ClassPathXmlApplicationContext("propertyEditor.xml");
         PropertyEditorDemo propertyEditorDemo = (PropertyEditorDemo) parentbeanFactory.getBean("propertyEditorDemo");
         System.out.println(propertyEditorDemo.toString());
+        String[] postProcessorNames = parentbeanFactory.getBeanNamesForType(PropertyEditorDemo.class, true, false);
+        String[] beanDefinitionNames = parentbeanFactory.getBeanDefinitionNames();
+        for (String name : postProcessorNames) {
+            System.out.println(name);
+        }
+        for (String name : beanDefinitionNames) {
+            System.out.println(name);
+        }
+    }
 
+    @Test
+    public void messageSouceDemo() {
+        ApplicationContext parentbeanFactory = new ClassPathXmlApplicationContext("messageSource.xml");
+        MessageSource ms = (MessageSource) parentbeanFactory.getBean("configProperties") ;
+        System.out.println(ms.getMessage("name",new Object[]{} , Locale.CHINESE));
+        System.out.println(ms.getMessage("name",new Object[]{} , Locale.ENGLISH));
 
     }
 }
