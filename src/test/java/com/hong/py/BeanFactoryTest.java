@@ -4,10 +4,7 @@ package com.hong.py;
 import com.hong.py.factory.AccountFactory;
 import com.hong.py.factory.MyFactoryBean;
 import com.hong.py.serviceImpl.*;
-import com.hong.py.springSourceCode.CustomBeanFactoryPostProcessor;
-import com.hong.py.springSourceCode.MyBeanFactoryAware;
-import com.hong.py.springSourceCode.MyClassPathXmlApplicationContext;
-import com.hong.py.springSourceCode.MyInitializingBean;
+import com.hong.py.springSourceCode.*;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -135,6 +132,19 @@ public class BeanFactoryTest {
         MessageSource ms = (MessageSource) parentbeanFactory.getBean("configProperties") ;
         System.out.println(ms.getMessage("name",new Object[]{} , Locale.CHINESE));
         System.out.println(ms.getMessage("name",new Object[]{} , Locale.ENGLISH));
+    }
 
+    @Test
+    public void listenerDemo() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("TestListener.xml");
+        TestEvent testEvent = new TestEvent("hello", "msg");
+        context.publishEvent(testEvent); //如果存在父容器也会调用
+    }
+
+    @Test
+    public void aspectDemo() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Aspect.xml");
+        AspectJTestBean aspectJTestBean = (AspectJTestBean)context.getBean("aspectJTestBean");
+        aspectJTestBean.aspectPrint();
     }
 }

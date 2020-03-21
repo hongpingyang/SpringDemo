@@ -163,9 +163,6 @@
     <!--工厂bean-->
     <bean id="myFactoryBean" class="com.hong.py.factory.MyFactoryBean"/>
 
-    <!--切面类bean-->
-    <bean id="logger" class="com.hong.py.uti.Logger"/>
-
 
     <!--注册属性编辑器-->
     <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
@@ -185,6 +182,9 @@
     <bean id="myInitializingBean" class="com.hong.py.springSourceCode.MyInitializingBean" init-method="initMethod">
         <property name="testStr" value="这是一个测试的类型"/>
     </bean>
+
+    <!--切面类bean-->
+    <bean id="logger" class="com.hong.py.uti.Logger"/>
 
     <!--aop配置-->
     <aop:config>
@@ -206,11 +206,10 @@
         </aop:aspect>
     </aop:config>
 
-    <!--包扫描-->
-    <context:component-scan base-package="com.hong.py.*"/>
-
     <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 
+    <!--包扫描-->
+    <context:component-scan base-package="com.hong.py.*"/>
 
     <!--配置连接池-->
     <bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource">
