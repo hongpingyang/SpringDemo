@@ -3,8 +3,11 @@ package com.hong.py;
 import com.hong.py.service.IAccountService;
 import com.hong.py.service.IAccountService2;
 import com.hong.py.service.IAccountService3;
+import com.hong.py.serviceImpl.TestMethodInterceptor;
+import com.hong.py.serviceImpl.adviseMethodInterceptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
@@ -60,5 +63,15 @@ public class springtest {
         accountServiceImpl5.TransferAccount();
     }
 
+    @Test
+    public void testMethodInterceptor() {
+
+        ProxyFactory proxyFactory=new ProxyFactory();
+        proxyFactory.setTarget(new TestMethodInterceptor());
+        proxyFactory.addAdvice(new adviseMethodInterceptor());
+
+        TestMethodInterceptor proxy = (TestMethodInterceptor)proxyFactory.getProxy();
+        proxy.doSomeThing();
+    }
 
 }
