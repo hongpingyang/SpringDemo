@@ -243,7 +243,7 @@
             no-rollback-for：指定一个异常，异常产生时，事务不回滚，产生其他异常都回滚。
           -->
         <tx:attributes>
-            <tx:method name="find*" read-only="true" isolation="SERIALIZABLE" propagation="SUPPORTS"/>
+            <tx:method name="find*" read-only="true" isolation="SERIALIZABLE" propagation="SUPPORTS" />
             <tx:method name="Transfer*" isolation="DEFAULT"/>
         </tx:attributes>
     </tx:advice>

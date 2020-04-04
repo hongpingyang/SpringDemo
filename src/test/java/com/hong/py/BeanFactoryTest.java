@@ -16,10 +16,12 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.AbstractXmlApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringValueResolver;
 
 import java.util.Locale;
 
+@EnableTransactionManagement
 public class BeanFactoryTest {
 
     @Test

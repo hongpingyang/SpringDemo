@@ -3,7 +3,7 @@ package com.hong.py.serviceImpl;
 import com.hong.py.service.IAccountService2;
 import org.springframework.stereotype.Service;
 
-@Service("accountService2Impl2")
+//@Service("accountService2Impl2")
 public class AccountService2Impl2 implements IAccountService2 {
 
     /**
@@ -12,7 +12,7 @@ public class AccountService2Impl2 implements IAccountService2 {
     @Override
     public void AddAccount() {
         System.out.println("新增账户");
-        int i=10/0;
+        //int i=10/0;
     }
 
     /**

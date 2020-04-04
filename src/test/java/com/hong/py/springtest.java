@@ -66,9 +66,10 @@ public class springtest {
     @Test
     public void testMethodInterceptor() {
 
+        //spring 中在获取到增强器后(Advice),也是用这种方式创建代理类
         ProxyFactory proxyFactory=new ProxyFactory();
         proxyFactory.setTarget(new TestMethodInterceptor());
-        proxyFactory.addAdvice(new adviseMethodInterceptor());
+        proxyFactory.addAdvice(new adviseMethodInterceptor()); // MethodInterceptor 继承 Interceptor extends Advice，所以才能加入
 
         TestMethodInterceptor proxy = (TestMethodInterceptor)proxyFactory.getProxy();
         proxy.doSomeThing();
