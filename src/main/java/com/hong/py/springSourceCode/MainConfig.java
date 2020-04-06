@@ -3,6 +3,7 @@ package com.hong.py.springSourceCode;
 import com.hong.py.serviceImpl.AccountService2Impl2;
 import com.hong.py.serviceImpl.ChildBean;
 import org.springframework.context.annotation.*;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 文件描述
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.*;
 @Import(value = com.hong.py.springSourceCode.MyImportSelector.class )
 //@Import(value = com.hong.py.springSourceCode.MyImportBeanDefinitionRegistrar.class)
 @EnableAspectJAutoProxy //开启
+@EnableTransactionManagement
 public class MainConfig {
 
     //beanName可以重复，但只有第一个会起作用
