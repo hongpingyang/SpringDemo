@@ -38,10 +38,10 @@ public class JdkDynamicAopProxy implements SelfAopProxy, InvocationHandler {
         Object val;
         if (chains.isEmpty()) {
             //直接反射调用
-            val=AopUtils.invokeJoinpointUsingReflection(proxy, method, args);
+            val=AopUtils.invokeJoinpointUsingReflection(this.advisedSupport.getTarget(), method, args);
         }else {
 
-            SelfMethodInvocation methodInvocation = new SelfMethodInvocation(proxy, method, args,chains);
+            SelfMethodInvocation methodInvocation = new SelfMethodInvocation(this.advisedSupport.getTarget(), method, args,chains);
             val=methodInvocation.proceed();
         }
 

@@ -5,9 +5,12 @@ import com.hong.py.springSourceCode.SelfAop.joinPoint.SelfMethodInterceptor;
 import com.hong.py.springSourceCode.SelfAop.pointCut.SelfMethodMatcher;
 import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfAdvisor;
 import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfPointCutAdvisor;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.core.OrderComparator;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SelfAdvisedSupport {
@@ -68,6 +71,11 @@ public class SelfAdvisedSupport {
                 }
             }
         }
+
+        //排序
+        Comparator<Object> comparatorToUse = OrderComparator.INSTANCE;
+        interceptorList.sort(comparatorToUse);
+
         return interceptorList;
     }
 }

@@ -1,4 +1,4 @@
-package com.hong.py.springSourceCode.SelfAop.autoProxy;
+package com.hong.py.springSourceCode.SelfAop.autoProxyCreator;
 
 import com.hong.py.springSourceCode.SelfAop.annotation.SelfAspect;
 import com.hong.py.springSourceCode.SelfAop.aopProxyFactory.SelfAopProxyFactory;

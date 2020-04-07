@@ -1,11 +1,10 @@
 package com.hong.py.springSourceCode.SelfAop.configuration;
 
-import com.hong.py.springSourceCode.SelfAop.autoProxy.SelfAnnotationAwareAspectJAutoProxyCreator;
+import com.hong.py.springSourceCode.SelfAop.autoProxyCreator.SelfAnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
-import org.springframework.core.Ordered;
 import org.springframework.core.type.AnnotationMetadata;
 
 

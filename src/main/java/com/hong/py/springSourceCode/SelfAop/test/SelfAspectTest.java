@@ -37,15 +37,17 @@ public class SelfAspectTest {
 
     }*/
 
+    @SelfAfter("test()")
+    public void afterTest() {
+        System.out.println("after");
+    }
+
     @SelfBefore("test()")
     public void beforeTest() {
         System.out.println("before");
     }
 
-    @SelfAfter("test()")
-    public void afterTest() {
-        System.out.println("after");
-    }
+
 
 
     /*@SelfBefore("test1()")
