@@ -1,5 +1,7 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.configuration;
 
+import com.hong.py.springSourceCode.SelfTransactioManage.configuration.SelfAutoProxyRegistrar;
+import com.hong.py.springSourceCode.SelfTransactioManage.configuration.SelfProxyTransactionManagementConfiguration;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 

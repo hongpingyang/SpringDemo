@@ -6,6 +6,8 @@ import com.hong.py.serviceImpl.AccountService2Impl2;
 import com.hong.py.serviceImpl.ChildBean;
 import com.hong.py.springSourceCode.ObjectProviderDemo;
 import com.hong.py.springSourceCode.TestListener1;
+import com.hong.py.springSourceCode.SelfAop.test.AspectPrint;
+import com.hong.py.springSourceCode.test.SelfAspectPrint;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
@@ -37,7 +39,7 @@ import java.util.List;
 @ContextConfiguration(classes = {com.hong.py.springSourceCode.MainConfig.class})
 public class SpringAnnotationTest implements ApplicationContextAware {
 
-    @Autowired
+    /*@Autowired
     private ObjectProviderDemo objectProviderDemo;
 
     @Autowired
@@ -45,7 +47,7 @@ public class SpringAnnotationTest implements ApplicationContextAware {
 
     @Autowired
     private List<ChildBean> childBeans;
-
+*/
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -54,7 +56,7 @@ public class SpringAnnotationTest implements ApplicationContextAware {
         this.applicationContext=applicationContext;
     }
 
-    @Test
+    /*@Test
     public void testObjectProvider() {
         objectProviderDemo.printChildBean();
         if (this.childBeans.size() > 0) {
@@ -63,18 +65,20 @@ public class SpringAnnotationTest implements ApplicationContextAware {
                 System.out.println(bean.toString());
             }
         }
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testApplicationListener() {
         testListener1.doSomeEvent();
-    }
+    }*/
 
     @Test
     public void testAop() {
-
-        IAccountService2 accountService2Impl2 = (IAccountService2)applicationContext.getBean("accountService2Impl2");
-        accountService2Impl2.AddAccount();
+        //IAccountService2 accountService2Impl2 = (IAccountService2)applicationContext.getBean("accountService2Impl2");
+        //accountService2Impl2.AddAccount();
+        AspectPrint selfAspectPrint = (AspectPrint) applicationContext.getBean("selfAspectPrint");
+        selfAspectPrint.aspectPrint();
+        //selfAspectPrint.aspectPrint1();
     }
 
 

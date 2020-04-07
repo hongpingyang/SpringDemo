@@ -14,7 +14,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 /**
  * 注入切面
  */
-@Configuration
+//@Configuration
 public class SelfProxyTransactionManagementConfiguration  {
 
 
