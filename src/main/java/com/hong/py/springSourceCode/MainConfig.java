@@ -5,6 +5,7 @@ import com.hong.py.serviceImpl.ChildBean;
 import com.hong.py.springSourceCode.SelfAop.annotation.SelfEnableAspectJAutoProxy;
 import com.hong.py.springSourceCode.SelfAop.test.SelfAspectPrint;
 import com.hong.py.springSourceCode.test.SelfAspectTest;
+import com.hong.py.springSourceCode.test.SelfTransactionPrint;
 import org.springframework.context.annotation.*;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -30,9 +31,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@Import(value = com.hong.py.springSourceCode.MyImportSelector.class )
 //@Import(value = com.hong.py.springSourceCode.MyImportBeanDefinitionRegistrar.class)
 //@EnableAspectJAutoProxy //开启
-@SelfEnableAspectJAutoProxy
-//@EnableTransactionManagement
-@ComponentScan(value = "com.hong.py.springSourceCode.SelfAop.test")
+//@SelfEnableAspectJAutoProxy
+@ComponentScan(value = "com.hong.py.springSourceCode.test")
+
+//@SelfEnableTransactionManagement
+@EnableTransactionManagement
 public class MainConfig {
 
     /*//beanName可以重复，但只有第一个会起作用
@@ -71,11 +74,16 @@ public class MainConfig {
         return accountService2Impl2;
     }
 */
-    @Bean
+    /*@Bean
     public SelfAspectPrint selfAspectPrint() {
         SelfAspectPrint selfAspectPrint = new SelfAspectPrint();
         return selfAspectPrint;
-    }
+    }*/
 
+    @Bean
+    public SelfTransactionPrint selfTransactionPrint() {
+        SelfTransactionPrint selfTransactionPrint = new SelfTransactionPrint();
+        return selfTransactionPrint;
+    }
 
 }

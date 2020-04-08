@@ -8,6 +8,7 @@ import com.hong.py.springSourceCode.ObjectProviderDemo;
 import com.hong.py.springSourceCode.TestListener1;
 import com.hong.py.springSourceCode.SelfAop.test.AspectPrint;
 import com.hong.py.springSourceCode.test.SelfAspectPrint;
+import com.hong.py.springSourceCode.test.TransactionPrint;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
@@ -79,6 +80,12 @@ public class SpringAnnotationTest implements ApplicationContextAware {
         AspectPrint selfAspectPrint = (AspectPrint) applicationContext.getBean("selfAspectPrint");
         selfAspectPrint.aspectPrint();
         //selfAspectPrint.aspectPrint1();
+    }
+
+    @Test
+    public void testTransaction() {
+        TransactionPrint selfTransactionPrint = (TransactionPrint) applicationContext.getBean("selfTransactionPrint");
+        selfTransactionPrint.aspectPrint();
     }
 
 

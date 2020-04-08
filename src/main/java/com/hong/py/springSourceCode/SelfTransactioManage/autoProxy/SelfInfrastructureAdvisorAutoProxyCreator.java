@@ -1,5 +1,10 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.autoProxy;
 
+import com.hong.py.springSourceCode.SelfAop.aopProxyFactory.SelfAopProxyFactory;
+import com.hong.py.springSourceCode.SelfAop.pointCut.SelfMethodMatcher;
+import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfAdvisor;
+import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfPointCutAdvisor;
+import com.hong.py.springSourceCode.SelfTransactioManage.core.TransactionAdvisorsBuilder;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.Pointcut;
@@ -13,8 +18,12 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,15 +31,14 @@ public class SelfInfrastructureAdvisorAutoProxyCreator implements InstantiationA
 
     private ConfigurableListableBeanFactory beanFactory;
 
-    private final Set<String> targetSourcedBeans = Collections.newSetFromMap(new ConcurrentHashMap<>(16));
-
-    private final Map<Object, Boolean> advisedBeans = new ConcurrentHashMap<>(256);
-
-    private volatile String[] cachedAdvisorBeanNames;
+    private TransactionAdvisorsBuilder transactionAdvisorsBuilder;
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
          this.beanFactory=(ConfigurableListableBeanFactory)beanFactory;
+
+         transactionAdvisorsBuilder = new TransactionAdvisorsBuilder();
+         transactionAdvisorsBuilder.setBeanFactory(this.beanFactory);
     }
 
     /**
@@ -42,18 +50,6 @@ public class SelfInfrastructureAdvisorAutoProxyCreator implements InstantiationA
      */
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
-
-        Object cacheKey = getCacheKey(beanClass, beanName);
-
-        if (!StringUtils.hasLength(beanName) || !this.targetSourcedBeans.contains(beanName)) {
-            if (this.advisedBeans.containsKey(cacheKey)) {
-                return null;
-            }
-            if (isInfrastructureClass(beanClass) || shouldSkip(beanClass, beanName)) {
-                this.advisedBeans.put(cacheKey, Boolean.FALSE);
-                return null;
-            }
-        }
 
         return null;
     }
@@ -78,81 +74,86 @@ public class SelfInfrastructureAdvisorAutoProxyCreator implements InstantiationA
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 
-        if (bean != null) {
-            Object cacheKey = getCacheKey(bean.getClass(), beanName);
-            return wrapIfNecessary(bean, beanName, cacheKey);
+        List<SelfAdvisor> advicesAndAdvisorsForBean = getAdvicesAndAdvisorsForBean(bean.getClass());
+        //生成代理
+        if (advicesAndAdvisorsForBean != null && advicesAndAdvisorsForBean.size() > 0) {
+            return CreateProxy(bean,beanName,advicesAndAdvisorsForBean);
         }
         return bean;
     }
 
+    /**
+     * 找到合适的增强器
+     * @param beanClass
+     * @return
+     */
+    protected List<SelfAdvisor> getAdvicesAndAdvisorsForBean(Class<?> beanClass) {
 
-    protected Object getCacheKey(Class<?> beanClass, @Nullable String beanName) {
-        if (StringUtils.hasLength(beanName)) {
-            return (FactoryBean.class.isAssignableFrom(beanClass) ?
-                    BeanFactory.FACTORY_BEAN_PREFIX + beanName : beanName);
+        List<SelfAdvisor> candidateAdvisors = this.transactionAdvisorsBuilder.GetAspectJAdvisors();
+
+        if (candidateAdvisors.isEmpty()) {
+            return null;
+        }
+
+        List<SelfAdvisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass);
+
+        return eligibleAdvisors;
+    }
+
+    private List<SelfAdvisor> findAdvisorsThatCanApply(List<SelfAdvisor> candidateAdvisors, Class<?> clazz) {
+        if (candidateAdvisors.isEmpty()) {
+            return candidateAdvisors;
+        }
+        List<SelfAdvisor> eligibleAdvisors = new ArrayList<>();
+        for (SelfAdvisor candidate : candidateAdvisors) {
+            if (canApply(candidate, clazz)) {
+                eligibleAdvisors.add(candidate);
+            }
+        }
+        return eligibleAdvisors;
+    }
+
+    private static boolean canApply(SelfAdvisor advisor, Class<?> targetClass) {
+        if (advisor instanceof SelfPointCutAdvisor) {
+            SelfPointCutAdvisor pca = (SelfPointCutAdvisor) advisor;
+            return canApply(pca.getMethodMatcher(), targetClass);
         }
         else {
-            return beanClass;
+            // It doesn't have a pointcut so we assume it applies.
+            return true;
         }
     }
 
-    protected boolean isInfrastructureClass(Class<?> beanClass) {
-        boolean retVal = Advice.class.isAssignableFrom(beanClass) ||
-                Pointcut.class.isAssignableFrom(beanClass) ||
-                Advisor.class.isAssignableFrom(beanClass) ||
-                AopInfrastructureBean.class.isAssignableFrom(beanClass);
-        return retVal;
-    }
+    public static boolean canApply(SelfMethodMatcher methodMatcher, Class<?> targetClass) {
 
-    protected boolean shouldSkip(Class<?> beanClass, String beanName) {
+        Set<Class<?>> classes = new LinkedHashSet<>();
 
-        String[] advisorNames=this.cachedAdvisorBeanNames;
-        if (advisorNames == null) {
-            advisorNames= BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
-                    this.beanFactory, Advisor.class, true, false);
+        if (!Proxy.isProxyClass(targetClass)) {
+            classes.add(ClassUtils.getUserClass(targetClass));
         }
+        //获取所有的接口
+        classes.addAll(ClassUtils.getAllInterfacesForClassAsSet(targetClass));
 
-        List<Advisor> candidateAdvisors = new ArrayList<>();
-
-        for (String name : advisorNames) {
-            candidateAdvisors.add(this.beanFactory.getBean(name, Advisor.class));
-        }
-
-        for (Advisor advisor : candidateAdvisors) {
-            if (advisor instanceof AspectJPointcutAdvisor &&
-                    ((AspectJPointcutAdvisor) advisor).getAspectName().equals(beanName)) {
-                return true;
+        for (Class<?> clazz : classes) {
+            Method[] methods = ReflectionUtils.getAllDeclaredMethods(clazz);
+            for (Method method : methods) {
+                if(methodMatcher.matches(method, targetClass)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
 
-        if (StringUtils.hasLength(beanName) && this.targetSourcedBeans.contains(beanName)) {
-            return bean;
-        }
-        if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
-            return bean;
-        }
-        if (isInfrastructureClass(bean.getClass()) || shouldSkip(bean.getClass(), beanName)) {
-            this.advisedBeans.put(cacheKey, Boolean.FALSE);
-            return bean;
-        }
-
-        // Create proxy if we have advice.
-       /* Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
-        if (specificInterceptors != DO_NOT_PROXY) {
-            this.advisedBeans.put(cacheKey, Boolean.TRUE);
-            Object proxy = createProxy(
-                    bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
-            this.proxyTypes.put(cacheKey, proxy.getClass());
-            return proxy;
-        }
-*/
-        this.advisedBeans.put(cacheKey, Boolean.FALSE);
-        return bean;
+    private Object CreateProxy(Object bean,String beanName,List<SelfAdvisor> advisors) {
+        SelfAopProxyFactory selfAopProxyFactory = new SelfAopProxyFactory();
+        selfAopProxyFactory.setTarget(bean);
+        selfAopProxyFactory.setAdvisors(advisors);
+        selfAopProxyFactory.setBeanName(beanName);
+        return selfAopProxyFactory.getProxy();
     }
+
 
 
 

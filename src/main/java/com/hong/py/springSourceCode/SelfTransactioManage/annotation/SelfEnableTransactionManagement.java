@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Import(SelfTransactionManagementConfigurationSelector.class)
-public @interface EnableTransactionManagement {
+public @interface SelfEnableTransactionManagement {
 
 
 

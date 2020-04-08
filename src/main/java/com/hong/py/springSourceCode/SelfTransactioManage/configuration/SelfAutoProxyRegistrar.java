@@ -23,7 +23,7 @@ public class SelfAutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 
         RootBeanDefinition beanDefinition = new RootBeanDefinition(SelfInfrastructureAdvisorAutoProxyCreator.class);
         beanDefinition.setSource(null);
-        beanDefinition.getPropertyValues().add("order", Ordered.HIGHEST_PRECEDENCE);
+        //beanDefinition.getPropertyValues().add("order", Ordered.HIGHEST_PRECEDENCE);
         beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
         registry.registerBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME, beanDefinition);
 
