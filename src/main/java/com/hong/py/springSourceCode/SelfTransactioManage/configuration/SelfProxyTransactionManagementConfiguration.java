@@ -26,7 +26,7 @@ public class SelfProxyTransactionManagementConfiguration  {
     public SelfBeanFactoryTransactionAttributeSourceAdvisor transactionAdvisor() {
 
         SelfBeanFactoryTransactionAttributeSourceAdvisor advisor = new SelfBeanFactoryTransactionAttributeSourceAdvisor();
-        advisor.setTransactionAttributeSource(transactionAttributeSource());
+        //advisor.setTransactionAttributeSource(transactionAttributeSource());
         advisor.setAdvice(transactionInterceptor());
 
         return advisor;
@@ -36,11 +36,11 @@ public class SelfProxyTransactionManagementConfiguration  {
      * 用来处理Transactional注解的
      * @return
      */
-    @Bean
+    /*@Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public SelfTransactionAttributeSource transactionAttributeSource() {
         return new AnnotationTransactionAttributeSource();
-    }
+    }*/
 
     /**
      * 拦截器
@@ -50,7 +50,7 @@ public class SelfProxyTransactionManagementConfiguration  {
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public SelfTransactionInterceptor transactionInterceptor() {
         SelfTransactionInterceptor interceptor = new SelfTransactionInterceptor();
-        interceptor.setTransactionAttributeSource(transactionAttributeSource());
+        //interceptor.setTransactionAttributeSource(transactionAttributeSource());
         /*if (this.txManager != null) {
             interceptor.setTransactionManager(this.txManager);
         }*/

@@ -2,10 +2,9 @@ package com.hong.py.springSourceCode.SelfAop.aopProxyFactory;
 
 import com.hong.py.springSourceCode.SelfAop.advice.SelfAdvice;
 import com.hong.py.springSourceCode.SelfAop.joinPoint.SelfMethodInterceptor;
-import com.hong.py.springSourceCode.SelfAop.pointCut.SelfMethodMatcher;
-import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfAdvisor;
+import com.hong.py.springSourceCode.common.SelfMethodMatcher;
+import com.hong.py.springSourceCode.common.SelfAdvisor;
 import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfPointCutAdvisor;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.OrderComparator;
 
 import java.lang.reflect.Method;

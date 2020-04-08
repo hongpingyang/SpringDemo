@@ -1,5 +1,7 @@
 package com.hong.py.springSourceCode.test;
 
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -18,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * <p>
  * Copyright © 2020 hongpy Technologies Inc. All Rights Reserved
  **/
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
 public class SelfTransactionPrint implements TransactionPrint {
 
     @Override

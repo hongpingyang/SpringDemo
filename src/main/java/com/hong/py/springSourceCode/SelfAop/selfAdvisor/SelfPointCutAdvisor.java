@@ -2,7 +2,8 @@ package com.hong.py.springSourceCode.SelfAop.selfAdvisor;
 
 import com.hong.py.springSourceCode.SelfAop.advice.SelfAdvice;
 import com.hong.py.springSourceCode.SelfAop.pointCut.AspectJMethodMatcher;
-import com.hong.py.springSourceCode.SelfAop.pointCut.SelfMethodMatcher;
+import com.hong.py.springSourceCode.common.SelfAdvisor;
+import com.hong.py.springSourceCode.common.SelfMethodMatcher;
 import com.hong.py.springSourceCode.SelfAop.pointCut.SelfPointcut;
 
 import java.lang.reflect.Method;

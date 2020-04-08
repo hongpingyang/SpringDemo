@@ -1,10 +1,9 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.selfAdvisor;
 
 import com.hong.py.springSourceCode.SelfAop.advice.SelfAdvice;
-import com.hong.py.springSourceCode.SelfAop.pointCut.SelfMethodMatcher;
+import com.hong.py.springSourceCode.common.SelfMethodMatcher;
 import com.hong.py.springSourceCode.SelfAop.pointCut.SelfPointcut;
-import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfAdvisor;
-import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfPointCutAdvisor;
+import com.hong.py.springSourceCode.common.SelfAdvisor;
 import com.hong.py.springSourceCode.SelfTransactioManage.core.SelfTransactionAttributeSource;
 import com.hong.py.springSourceCode.SelfTransactioManage.interceptor.SelfTransactionInterceptor;
 
@@ -14,7 +13,9 @@ public class SelfBeanFactoryTransactionAttributeSourceAdvisor implements  SelfAd
 
     private SelfAdvice advice;
 
-    public void setTransactionAttributeSource(SelfTransactionAttributeSource transactionAttributeSource) {
+    private TransactionMethodMatcher methodMatcher = new TransactionMethodMatcher();
+
+    public void setTransactionAttributeSource(SelfTransactionAttributeSource selfTransactionAttributeSource) {
        this.selfTransactionAttributeSource=selfTransactionAttributeSource;
     }
 
@@ -30,7 +31,6 @@ public class SelfBeanFactoryTransactionAttributeSourceAdvisor implements  SelfAd
     @Override
     public SelfMethodMatcher getMethodMatcher() {
 
-
-        return null;
+        return methodMatcher;
     }
 }

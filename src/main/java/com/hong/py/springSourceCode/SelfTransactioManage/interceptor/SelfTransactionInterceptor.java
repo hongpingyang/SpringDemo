@@ -10,4 +10,7 @@ public class SelfTransactionInterceptor implements SelfAdvice {
     public void setTransactionAttributeSource(SelfTransactionAttributeSource transactionAttributeSource) {
         this.selfTransactionAttributeSource=selfTransactionAttributeSource;
     }
+
+
+
 }

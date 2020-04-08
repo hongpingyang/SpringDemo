@@ -1,4 +1,4 @@
-package com.hong.py.springSourceCode.SelfAop.pointCut;
+package com.hong.py.springSourceCode.common;
 
 import java.lang.reflect.Method;
 

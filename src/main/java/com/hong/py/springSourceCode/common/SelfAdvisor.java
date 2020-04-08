@@ -1,4 +1,4 @@
-package com.hong.py.springSourceCode.SelfAop.selfAdvisor;
+package com.hong.py.springSourceCode.common;
 
 import  com.hong.py.springSourceCode.SelfAop.advice.SelfAdvice;
 

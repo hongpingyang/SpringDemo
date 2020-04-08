@@ -1,7 +1,7 @@
 package com.hong.py.springSourceCode.SelfAop.core;
 
 
-import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfAdvisor;
+import com.hong.py.springSourceCode.common.SelfAdvisor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;

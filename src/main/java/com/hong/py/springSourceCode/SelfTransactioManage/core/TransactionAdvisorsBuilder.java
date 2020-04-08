@@ -1,7 +1,6 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.core;
 
-import com.hong.py.springSourceCode.SelfAop.core.AspectAdvisorsFinder;
-import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfAdvisor;
+import com.hong.py.springSourceCode.common.SelfAdvisor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -41,7 +40,7 @@ public class TransactionAdvisorsBuilder {
         return beanFactory;
     }
 
-    public List<SelfAdvisor> GetAspectJAdvisors() {
+    public List<SelfAdvisor> GetTransactionAdvisors() {
         List<SelfAdvisor> selfAdvisors = buildTransactionAdvisors();
         return selfAdvisors;
     }

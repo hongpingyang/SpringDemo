@@ -1,31 +1,21 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.autoProxy;
 
 import com.hong.py.springSourceCode.SelfAop.aopProxyFactory.SelfAopProxyFactory;
-import com.hong.py.springSourceCode.SelfAop.pointCut.SelfMethodMatcher;
-import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfAdvisor;
+import com.hong.py.springSourceCode.common.SelfMethodMatcher;
+import com.hong.py.springSourceCode.common.SelfAdvisor;
 import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfPointCutAdvisor;
 import com.hong.py.springSourceCode.SelfTransactioManage.core.TransactionAdvisorsBuilder;
-import org.aopalliance.aop.Advice;
-import org.springframework.aop.Advisor;
-import org.springframework.aop.Pointcut;
-import org.springframework.aop.aspectj.AspectJPointcutAdvisor;
-import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
-import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class SelfInfrastructureAdvisorAutoProxyCreator implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
 
@@ -89,7 +79,7 @@ public class SelfInfrastructureAdvisorAutoProxyCreator implements InstantiationA
      */
     protected List<SelfAdvisor> getAdvicesAndAdvisorsForBean(Class<?> beanClass) {
 
-        List<SelfAdvisor> candidateAdvisors = this.transactionAdvisorsBuilder.GetAspectJAdvisors();
+        List<SelfAdvisor> candidateAdvisors = this.transactionAdvisorsBuilder.GetTransactionAdvisors();
 
         if (candidateAdvisors.isEmpty()) {
             return null;
