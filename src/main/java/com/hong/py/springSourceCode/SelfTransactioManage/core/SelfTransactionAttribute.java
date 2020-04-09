@@ -1,4 +1,4 @@
-package com.hong.py.springSourceCode.SelfTransactioManage.interceptor;
+package com.hong.py.springSourceCode.SelfTransactioManage.core;
 
 import com.hong.py.springSourceCode.SelfTransactioManage.core.SelfTransactionDefinition;
 

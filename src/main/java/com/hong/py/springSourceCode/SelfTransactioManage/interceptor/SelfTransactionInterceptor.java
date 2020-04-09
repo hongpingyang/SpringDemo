@@ -3,6 +3,7 @@ package com.hong.py.springSourceCode.SelfTransactioManage.interceptor;
 import com.hong.py.springSourceCode.SelfAop.advice.SelfAdvice;
 import com.hong.py.springSourceCode.SelfAop.joinPoint.SelfMethodInterceptor;
 import com.hong.py.springSourceCode.SelfAop.joinPoint.SelfMethodInvocation;
+import com.hong.py.springSourceCode.SelfTransactioManage.core.SelfTransactionAttribute;
 import com.hong.py.springSourceCode.SelfTransactioManage.core.SelfTransactionAttributeSource;
 import com.hong.py.springSourceCode.SelfTransactioManage.manager.SelfPlatformTransactionManager;
 import org.springframework.beans.BeansException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils;
 import org.springframework.core.Ordered;
+import org.springframework.jdbc.datasource.ConnectionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.lang.reflect.Method;
@@ -48,7 +50,6 @@ public class SelfTransactionInterceptor implements SelfAdvice, SelfMethodInterce
         if (attr != null) {
 
             SelfPlatformTransactionManager manager = determineTransactionManager(attr);
-            TransactionSynchronizationManager.bindResource();
             Connection connection = createTransactionIfNecessary(manager);
 
             Object retVal;

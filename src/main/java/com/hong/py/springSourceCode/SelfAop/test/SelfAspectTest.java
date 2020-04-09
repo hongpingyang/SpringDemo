@@ -48,8 +48,6 @@ public class SelfAspectTest {
     }
 
 
-
-
     /*@SelfBefore("test1()")
     public void beforeTest1() {
         System.out.println("before1");

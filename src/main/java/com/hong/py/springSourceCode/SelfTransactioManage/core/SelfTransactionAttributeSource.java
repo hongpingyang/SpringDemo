@@ -1,7 +1,5 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.core;
 
-import com.hong.py.springSourceCode.SelfTransactioManage.interceptor.SelfTransactionAttribute;
-
 import java.lang.reflect.Method;
 
 /**

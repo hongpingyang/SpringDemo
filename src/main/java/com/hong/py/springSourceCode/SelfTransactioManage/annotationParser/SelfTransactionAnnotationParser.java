@@ -1,7 +1,7 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.annotationParser;
 
 import com.hong.py.springSourceCode.SelfTransactioManage.annotation.SelfTransactional;
-import com.hong.py.springSourceCode.SelfTransactioManage.interceptor.SelfTransactionAttribute;
+import com.hong.py.springSourceCode.SelfTransactioManage.core.SelfTransactionAttribute;
 import com.hong.py.springSourceCode.SelfTransactioManage.selfenum.SelfIsolation;
 import com.hong.py.springSourceCode.SelfTransactioManage.selfenum.SelfPropagation;
 import org.springframework.aop.support.AopUtils;

@@ -1,6 +1,7 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.manager;
 
-import com.hong.py.springSourceCode.SelfTransactioManage.core.SelfTransactionDefinition;
+import org.springframework.jdbc.datasource.ConnectionHolder;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -36,16 +37,20 @@ public class SelfDataSourcePlatformTransactionManager implements SelfPlatformTra
 
     @Override
     public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        Connection connection = dataSource.getConnection();
+        TransactionSynchronizationManager.bindResource(getDataSource(), new ConnectionHolder(connection));
+        return connection;
     }
 
     @Override
     public void commit(Connection connection) throws SQLException {
         connection.commit();
+        TransactionSynchronizationManager.unbindResource(getDataSource());
     }
 
     @Override
     public void rollback(Connection connection) throws SQLException {
         connection.rollback();
+        TransactionSynchronizationManager.unbindResource(getDataSource());
     }
 }
