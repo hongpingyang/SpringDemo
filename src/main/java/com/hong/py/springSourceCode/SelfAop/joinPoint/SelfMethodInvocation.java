@@ -33,6 +33,30 @@ public class SelfMethodInvocation implements JoinPoint {
 
     private Object[] args;
 
+    public Object getTagetClass() {
+        return tagetClass;
+    }
+
+    public void setTagetClass(Object tagetClass) {
+        this.tagetClass = tagetClass;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
+
+    public Object[] getArgs() {
+        return args;
+    }
+
+    public void setArgs(Object[] args) {
+        this.args = args;
+    }
+
     public SelfMethodInvocation(Object tagetClass,Method method,Object[] args,List<Object> selfMethodInterceptors) {
         this.tagetClass=tagetClass;
         this.method=method;

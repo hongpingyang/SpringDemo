@@ -18,7 +18,6 @@ public class SelfTransactionAttribute implements SelfTransactionDefinition {
 
     String name=null;
 
-
     @Override
     public int getPropagationBehavior() {
         return this.propagationBehavior;
@@ -62,5 +61,14 @@ public class SelfTransactionAttribute implements SelfTransactionDefinition {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 异常回滚点
+     * @param ex
+     * @return
+     */
+    public boolean rollbackOn(Throwable ex) {
+        return (ex instanceof RuntimeException || ex instanceof Error);
     }
 }

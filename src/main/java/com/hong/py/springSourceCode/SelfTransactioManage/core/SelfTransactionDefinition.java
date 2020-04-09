@@ -153,6 +153,9 @@ public interface SelfTransactionDefinition {
     int TIMEOUT_DEFAULT = -1;
 
 
+    boolean READ_ONLY=false;
+
+
     int getPropagationBehavior();
 
 

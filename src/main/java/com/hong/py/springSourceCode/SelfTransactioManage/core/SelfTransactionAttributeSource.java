@@ -1,5 +1,9 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.core;
 
+import com.hong.py.springSourceCode.SelfTransactioManage.interceptor.SelfTransactionAttribute;
+
+import java.lang.reflect.Method;
+
 /**
  * 文件描述
  *
@@ -16,10 +20,7 @@ package com.hong.py.springSourceCode.SelfTransactioManage.core;
  * <p>
  * Copyright © 2020 hongpy Technologies Inc. All Rights Reserved
  **/
-public class SelfTransactionAttributeSource {
+public interface SelfTransactionAttributeSource {
 
-
-
-
-
+    SelfTransactionAttribute getTransactionAttribute(Method method, Class<?> targetClass);
 }

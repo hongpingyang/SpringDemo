@@ -1,6 +1,7 @@
 package com.hong.py.springSourceCode.SelfTransactioManage.autoProxy;
 
 import com.hong.py.springSourceCode.SelfAop.aopProxyFactory.SelfAopProxyFactory;
+import com.hong.py.springSourceCode.SelfAop.pointCut.SelfPointcut;
 import com.hong.py.springSourceCode.common.SelfMethodMatcher;
 import com.hong.py.springSourceCode.common.SelfAdvisor;
 import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfPointCutAdvisor;
@@ -104,8 +105,8 @@ public class SelfInfrastructureAdvisorAutoProxyCreator implements InstantiationA
     }
 
     private static boolean canApply(SelfAdvisor advisor, Class<?> targetClass) {
-        if (advisor instanceof SelfPointCutAdvisor) {
-            SelfPointCutAdvisor pca = (SelfPointCutAdvisor) advisor;
+        if (advisor instanceof SelfPointcut) {
+            SelfPointcut pca = (SelfPointcut) advisor;
             return canApply(pca.getMethodMatcher(), targetClass);
         }
         else {

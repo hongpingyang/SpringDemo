@@ -1,13 +1,22 @@
 package com.hong.py.springSourceCode;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.hong.py.serviceImpl.AccountService2Impl2;
 import com.hong.py.serviceImpl.ChildBean;
 import com.hong.py.springSourceCode.SelfAop.annotation.SelfEnableAspectJAutoProxy;
 import com.hong.py.springSourceCode.SelfAop.test.SelfAspectPrint;
+import com.hong.py.springSourceCode.SelfTransactioManage.annotation.SelfEnableTransactionManagement;
+import com.hong.py.springSourceCode.SelfTransactioManage.manager.SelfDataSourcePlatformTransactionManager;
+import com.hong.py.springSourceCode.SelfTransactioManage.manager.SelfPlatformTransactionManager;
 import com.hong.py.springSourceCode.test.SelfAspectTest;
 import com.hong.py.springSourceCode.test.SelfTransactionPrint;
 import org.springframework.context.annotation.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
 
 /**
  * 文件描述
@@ -34,8 +43,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@SelfEnableAspectJAutoProxy
 @ComponentScan(value = "com.hong.py.springSourceCode.test")
 
-//@SelfEnableTransactionManagement
-@EnableTransactionManagement
+@SelfEnableTransactionManagement
+//@EnableTransactionManagement
 public class MainConfig {
 
     /*//beanName可以重复，但只有第一个会起作用
@@ -79,6 +88,37 @@ public class MainConfig {
         SelfAspectPrint selfAspectPrint = new SelfAspectPrint();
         return selfAspectPrint;
     }*/
+
+    @Bean
+    public DataSource dataSource() {
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/mybatis?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true");
+        dataSource.setUsername("root");
+        dataSource.setPassword("1234");
+        return dataSource;
+    }
+
+    /*@Bean
+    public PlatformTransactionManager platformTransactionManager() {
+        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource());
+        return dataSourceTransactionManager;
+    }*/
+
+    @Bean
+    public SelfPlatformTransactionManager selfPlatformTransactionManager(DataSource dataSource) {
+        SelfDataSourcePlatformTransactionManager dataSourceTransactionManager= new SelfDataSourcePlatformTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource);
+        return dataSourceTransactionManager;
+    }
+
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.setDataSource(dataSource);
+        return jdbcTemplate;
+    }
 
     @Bean
     public SelfTransactionPrint selfTransactionPrint() {

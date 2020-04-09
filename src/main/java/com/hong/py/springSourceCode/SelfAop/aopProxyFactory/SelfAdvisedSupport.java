@@ -2,6 +2,7 @@ package com.hong.py.springSourceCode.SelfAop.aopProxyFactory;
 
 import com.hong.py.springSourceCode.SelfAop.advice.SelfAdvice;
 import com.hong.py.springSourceCode.SelfAop.joinPoint.SelfMethodInterceptor;
+import com.hong.py.springSourceCode.SelfAop.pointCut.SelfPointcut;
 import com.hong.py.springSourceCode.common.SelfMethodMatcher;
 import com.hong.py.springSourceCode.common.SelfAdvisor;
 import com.hong.py.springSourceCode.SelfAop.selfAdvisor.SelfPointCutAdvisor;
@@ -57,8 +58,8 @@ public class SelfAdvisedSupport {
             return interceptorList;
 
         for (SelfAdvisor advisor : advisors) {
-            if (advisor instanceof SelfPointCutAdvisor) {
-                SelfPointCutAdvisor pointCutAdvisor = (SelfPointCutAdvisor) advisor;
+            if (advisor instanceof SelfPointcut) {
+                SelfPointcut pointCutAdvisor = (SelfPointcut) advisor;
                 SelfMethodMatcher methodMatcher = pointCutAdvisor.getMethodMatcher();
                 boolean matches = methodMatcher.matches(method, targetClass);
                 if (matches) {
