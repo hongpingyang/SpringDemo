@@ -1,16 +1,16 @@
 package com.hong.py;
 
 import com.hong.py.service.IAccountService2;
-import com.hong.py.serviceImpl.AccountService2Impl;
-import com.hong.py.serviceImpl.AccountService2Impl2;
-import com.hong.py.serviceImpl.ChildBean;
+import com.hong.py.serviceImpl.*;
 import com.hong.py.springSourceCode.ObjectProviderDemo;
 import com.hong.py.springSourceCode.TestListener1;
 import com.hong.py.springSourceCode.SelfAop.test.AspectPrint;
 import com.hong.py.springSourceCode.test.SelfAspectPrint;
+import com.hong.py.springSourceCode.test.TransactionAspectJTest;
 import com.hong.py.springSourceCode.test.TransactionPrint;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -88,5 +88,35 @@ public class SpringAnnotationTest implements ApplicationContextAware {
         selfTransactionPrint.aspectPrint();
     }
 
+    @Test
+    public void testTransactionAspectJ() {
+        TransactionAspectJTest transactionAspectJTest = (TransactionAspectJTest)applicationContext.getBean("transactionAspectJTest");
+        System.out.println("over");
+        transactionAspectJTest.aspectPrint();
+    }
 
+    /**
+     * 测试Aop的一些碰到的bug
+     * CGLIB
+     * JDK动态代理
+     */
+    @Test
+    public void testAopBug() {
+
+
+        ProxyFactory proxyFactory=new ProxyFactory();
+
+        proxyFactory.setTarget(new TestMethodInterceptor());
+        proxyFactory.addAdvice(new adviseMethodInterceptor()); // MethodInterceptor 继承 Interceptor extends SelfAdvice，所以才能加入
+        proxyFactory.setInterfaces(ITestMethodInterceptor.class);
+
+        TestMethodInterceptor proxy = (TestMethodInterceptor)proxyFactory.getProxy();
+        //ITestMethodInterceptor proxy = (ITestMethodInterceptor)proxyFactory.getProxy();
+
+        //getVal方法为final 导致代理没有代理这个方法。
+        proxy.SetValue("这个是测试的");
+
+        String val = proxy.getVal();//会输出null
+        System.out.println(val);
+    }
 }

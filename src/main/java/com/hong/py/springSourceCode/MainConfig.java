@@ -10,6 +10,7 @@ import com.hong.py.springSourceCode.SelfTransactioManage.manager.SelfDataSourceP
 import com.hong.py.springSourceCode.SelfTransactioManage.manager.SelfPlatformTransactionManager;
 import com.hong.py.springSourceCode.test.SelfAspectTest;
 import com.hong.py.springSourceCode.test.SelfTransactionPrint;
+import com.hong.py.springSourceCode.test.TransactionAspectJTest;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -43,8 +44,8 @@ import javax.sql.DataSource;
 //@SelfEnableAspectJAutoProxy
 @ComponentScan(value = "com.hong.py.springSourceCode.test")
 
-@SelfEnableTransactionManagement
-//@EnableTransactionManagement
+//@SelfEnableTransactionManagement
+@EnableTransactionManagement
 public class MainConfig {
 
     /*//beanName可以重复，但只有第一个会起作用
@@ -99,12 +100,12 @@ public class MainConfig {
         return dataSource;
     }
 
-    /*@Bean
+    @Bean
     public PlatformTransactionManager platformTransactionManager() {
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
         dataSourceTransactionManager.setDataSource(dataSource());
         return dataSourceTransactionManager;
-    }*/
+    }
 
     @Bean
     public SelfPlatformTransactionManager selfPlatformTransactionManager(DataSource dataSource) {
@@ -120,10 +121,16 @@ public class MainConfig {
         return jdbcTemplate;
     }
 
-    @Bean
+    /*@Bean
     public SelfTransactionPrint selfTransactionPrint() {
         SelfTransactionPrint selfTransactionPrint = new SelfTransactionPrint();
         return selfTransactionPrint;
+    }*/
+
+    @Bean
+    public TransactionAspectJTest transactionAspectJTest() {
+        TransactionAspectJTest transactionAspectJTest = new TransactionAspectJTest();
+        return transactionAspectJTest;
     }
 
 }
