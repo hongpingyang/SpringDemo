@@ -37,7 +37,7 @@ public class InterProcessMutexTest {
         client=base.curatorClient();
         client.start();
 
-        //可重入非公平互斥(独占)锁
+        //可重入公平互斥(独占)锁
         InterProcessMutex lock=new InterProcessMutex(client,"/lock");
 
         for (int i = 0; i < 10; i++) {

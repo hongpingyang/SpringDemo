@@ -16,6 +16,11 @@ import java.util.concurrent.TimeUnit;
  * 对与共享锁：判断前面是否有比自己小的节点且非共享(独占的)的节点存在，如果存在就会监听前面的节点。
  *
  * 对于独占锁：判断前面是否有比自己小的节点存在，如果存在就会监听前面的节点。自己则await阻塞等待前面的节点释放时唤醒自己。
+ *
+ * 需要实现包括公平锁、非公平锁。
+ * 公平是在节点删除时只通知相邻的节点来获取的锁；
+ * 非公平锁(惊群效应)是节点删除所有等待锁的线程重新竞争。
+ *
  */
 public class InterProcessReadWriteLocTest {
 
@@ -29,7 +34,7 @@ public class InterProcessReadWriteLocTest {
         InterProcessMutex readLock = lock.readLock(); //读锁
         InterProcessMutex writeLock = lock.writeLock();//写锁
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 10; i++) {
             //new Thread(new InterProcessReadWriteLocTest.ThreadTest(i,i==2?writeLock:readLock)).start();
             new Thread(new InterProcessReadWriteLocTest.ThreadTest(i,writeLock)).start();
         }
@@ -49,25 +54,25 @@ public class InterProcessReadWriteLocTest {
         @Override
         public void run() {
             try {
-                System.out.println("第" + threadFlag + "线程开始获取锁");
+                System.out.println("第" + Thread.currentThread().getName() + "线程开始获取锁");
                 //设置超时时间
-                haslock=lock.acquire(30000, TimeUnit.MILLISECONDS);
+                lock.acquire();
 
-                if(haslock) {
-                    System.out.println("第" + threadFlag + "线程获取到了锁");
-                }
-                else {
-                    System.out.println("第" + threadFlag + "线程没有获取到了锁");
-                }
+                //if(haslock) {
+                    System.out.println("第" + Thread.currentThread().getName() + "线程获取到了锁");
+                //}
+                //else {
+                //    System.out.println("第" + threadFlag + "线程没有获取到了锁");
+                //}
                 //等到1秒后释放锁
-                Thread.sleep(100000);
+                Thread.sleep(300000);
             } catch (Exception e) {
                 e.printStackTrace();
             }finally {
                 try {
-                    if(haslock)
+                    //if(haslock)
                         lock.release();
-                    System.out.println("第" + threadFlag + "线程释放了锁");
+                    System.out.println("第" + Thread.currentThread().getName() + "线程释放了锁");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
